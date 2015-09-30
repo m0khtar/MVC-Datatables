@@ -9,6 +9,9 @@ A simple demo using ASP.NET MVC and jQuery Datatables.
 # Prerequisites
 * Northwind db
 
+# Future Improvments
+* DatatableParams class needs to be made more generic.
+
 # Getting Started
 
 Clone and play !
