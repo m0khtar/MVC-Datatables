@@ -1,0 +1,80 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="Stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" type="text/css" />
+    <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+    <div>
+        <table id="customersDT" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Company name</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Company name</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                </tr>
+            </tfoot>
+            <tbody></tbody>
+        </table>
+
+        <script>
+            $(document).ready(function () {
+                // Setup - add a text input to each footer cell
+                $('#customersDT tfoot th').each(function () {
+                    var title = $('#customersDT thead th').eq($(this).index()).text();
+                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                });
+
+                //Datatable
+                var table = $('#customersDT').DataTable({
+                    "serverSide": true,
+                    "processing": true,
+                    "deferRender": true,
+                    "pageLength": 10,
+                    "ajax": {
+                        "url": "Home/GetCustomers",
+                        "dataType": 'json',
+                        "content-type": "application/json; charset=utf-8",
+                        "type": "POST"
+                    },
+                    "aoColumns": [
+                    { "data": "ID" },
+                    { "data": "Name" },
+                    { "data": "Address" },
+                    { "data": "PhoneNumber" }
+                    ],
+                });
+
+                table.columns().every(function () {
+                    var column = this;
+                    $('input', this.footer()).on('keyup change', function () {
+                        if (column.search() !== this.value) {
+                            column
+                                .search(this.value)
+                                .draw()
+                        }
+                    });
+                });
+            });
+        </script>
+
+    </div>
+</body>
+</html>
